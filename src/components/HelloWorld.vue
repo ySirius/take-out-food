@@ -18,18 +18,48 @@ const LoadStorage = async () => {
 
 function SetStorage() {
   var array = [
-    { name: "张国志", join: 10, win: 0 },
-    { name: "陈兆年", join: 10, win: 3 },
-    { name: "陈文博", join: 2, win: 0 },
-    { name: "yyyyyy", join: 11, win: 2 },
-    { name: "王龙", join: 10, win: 2 },
-    { name: "申庆涛", join: 6, win: 1 },
-    { name: "管坤", join: 6, win: 2 },
-    { name: "张超", join: 6, win: 0 },
+    { name: "张国志[5330]", join: 1, win: 0 },
+    { name: "陈兆年[6663]", join: 1, win: 0 },
+    { name: "陈文博[0090]", join: 1, win: 0 },
+    { name: "yyyyy[4267]", join: 1, win: 0 },
+    { name: "王龙[6221]", join: 1, win: 0 },
+    { name: "申庆涛[9627]", join: 1, win: 0 },
+    { name: "管坤[8167]", join: 1, win: 0 },
+    { name: "张超[5760]", join: 1, win: 0 },
   ];
   localStorage.setItem("dataJson", JSON.stringify(array));
 
   LoadStorage();
+}
+
+function RandomPerson() {
+  todayChance.value = [];
+  var JoinList: any = [];
+  if (!NameList.value || NameList.value.length == 0) {
+    alert("没有参与人");
+    return;
+  }
+  for (var i = 0; i < NameList.value.length; i++) {
+    if (checkList.value[i]) {
+      JoinList.push(NameList.value[i]);
+    }
+  }
+
+  if (JoinList.length == 0) {
+    alert("至少选择一个");
+    return;
+  }
+
+  var n = JoinList.length;
+  for (var i = n - 1; i >= 0; i--) {
+    var random = Math.round(Math.random() * i);
+    var tmp = JoinList[i];
+    JoinList[i] = JoinList[random];
+    JoinList[random] = tmp;
+  }
+  console.log(JoinList, "新队列");
+  winner.value = JoinList[0].name;
+  // swap(arr[i], arr[rand() % (i + 1)])
 }
 
 function weighted_random(options: any) {
@@ -114,9 +144,9 @@ onMounted(() => {
     <p>
       <el-button class="el-button-go"
                  type="danger"
-                 @click="getPerson()">摇一摇</el-button>
+                 @click="RandomPerson()">摇一摇</el-button>
     </p>
-    <div class="table">
+    <!-- <div class="table">
       <el-table :data="todayChance"
                 stripe
                 style="width: 100%">
@@ -131,7 +161,7 @@ onMounted(() => {
           </template>
         </el-table-column>
       </el-table>
-    </div>
+    </div> -->
 
     <el-button type="danger"
                @click="reset()"
@@ -160,7 +190,7 @@ onMounted(() => {
 
 .el-check-tag {
   margin: 8px;
-  width: 150px;
+  width: 250px;
   height: 100px;
   align-items: center;
   line-height: 100px;
